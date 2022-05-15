@@ -10,12 +10,16 @@
         />
         <span class="search-focus"></span>
       </div>
+      <div class='search-list'>
+        <Card v-for='pokemon in pokemons' :key='pokemon.id' :pokemon="pokemon"/>
+      </div>
     </main>
   </div>
 </template>
 
 <script>
 import Api from './services/api'
+import Card from './components/Card.vue'
 
 export default {
   name: "App",
@@ -26,7 +30,7 @@ export default {
     }
   },
   components: {
-    
+    Card
   },
   async created() {
     const { data : { results } } = await Api.getAll()
