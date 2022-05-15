@@ -65,8 +65,6 @@ export default {
         id: data.id,
         name: data.name,
         image: data.sprites.front_default,
-        types: data.types,
-        experience: data.base_experience,
         stats: [data.stats[0], data.stats[1], data.stats[2]]
       };
       this.pokemons.push(obj);
