@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="container">
+    <template v-if='!loading'>
     <main>
       <div class="search">
         <input
@@ -12,12 +13,19 @@
       </div>
       <div class="search-list">
         <Card
-          v-for="pokemon in pokemons"
+          v-for="pokemon in filterPokemons"
           :key="pokemon.id"
           :pokemon="pokemon"
         />
       </div>
     </main>
+    </template>
+    <template v-else>
+      <div class='loading'>
+      <img src='./assets/loading.gif' alt='Carregando...' />
+      <p>Carregando... </p>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -31,13 +39,22 @@ export default {
     return {
       search: "",
       pokemons: [],
-      infos: {}
+      infos: {},
+      loading: true
     };
   },
   components: {
     Card
   },
+  computed: {
+    filterPokemons () {
+      return this.pokemons.filter(p => {
+        return p.name.toLowerCase().includes(this.search.toLowerCase())
+      })
+    }
+  },
   async created() {
+    this.loading = true
     const {
       data: { results },
     } = await Api.getAll();
@@ -50,10 +67,13 @@ export default {
         image: data.sprites.front_default,
         types: data.types,
         experience: data.base_experience,
-        stats: [data.stats[0], data.stats[1], data.stats[2]],
+        stats: [data.stats[0], data.stats[1], data.stats[2]]
       };
       this.pokemons.push(obj);
     }
+    setTimeout(() => { 
+      this.loading = false
+      }, 2000)
   },
 };
 </script>
@@ -120,6 +140,17 @@ body {
         }
       }
     }
+  }
+}
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  p {
+    text-align: center;
+    font-size: 20px;
   }
 }
 </style>

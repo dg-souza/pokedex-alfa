@@ -1,19 +1,24 @@
 <template>
   <ul class="lista">
     <li v-for="item in itens" :key="item.stat.name">
-      {{ item.stat.name }} <span>{{ item.base_stat }}</span>
+      <strong>{{ item.stat.name === 'hp' ? formatName(item.stat.name, 2) : formatName(item.stat.name, 1)}} </strong> <span>{{ item.base_stat }}</span>
     </li>
-    {{ experience }}
   </ul>
 </template>
 
 <script>
+import formatter from '../utils/formatName'
+
 export default {
   name: "List",
   props: {
-    itens: { type: Array, require: true },
-    experience: { type: String }
+    itens: { type: Array, require: true }
   },
+  methods: {
+    formatName(name, e) {
+      return formatter.formatName(name, e)
+    }
+  }
 };
 </script>
 
@@ -23,7 +28,7 @@ export default {
   grid-template-columns: repeat(3, 77px);
   justify-content: space-between;
   list-style: none;
-  margin: 16px;
+  margin: 8px;
   padding: 0;
 
   @media (max-width: 1024px) {
@@ -38,29 +43,19 @@ export default {
     grid-template-columns: repeat(1, 100%);
   }
 
+  strong {
+    text-align: center;
+  }
+
   li {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 7px;
-    border-radius: 5px;
-    font-size: 15px;
+    font-size: 14px;
 
     @media (max-width: 425px) {
       margin-bottom: 5px;
-    }
-
-    &:nth-child(1) {
-      background-color: rgb(134, 238, 160);
-    }
-    &:nth-child(2) {
-      background-color: crimson;
-    }
-    &:nth-child(3) {
-      background-color: #ccc;
-    }
-    &:nth-child(4) {
-        background-color: rgb(102, 102, 102);
     }
   }
 }
