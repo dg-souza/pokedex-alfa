@@ -10,44 +10,51 @@
         />
         <span class="search-focus"></span>
       </div>
-      <div class='search-list'>
-        <Card v-for='pokemon in pokemons' :key='pokemon.id' :pokemon="pokemon"/>
+      <div class="search-list">
+        <Card
+          v-for="pokemon in pokemons"
+          :key="pokemon.id"
+          :pokemon="pokemon"
+        />
       </div>
     </main>
   </div>
 </template>
 
 <script>
-import Api from './services/api'
-import Card from './components/Card.vue'
+import Api from "./services/api";
+import Card from "./components/Card.vue";
 
 export default {
   name: "App",
   data() {
     return {
-      search: '',
-      pokemons: []
-    }
+      search: "",
+      pokemons: [],
+      infos: {}
+    };
   },
   components: {
     Card
   },
   async created() {
-    const { data : { results } } = await Api.getAll()
-    
-    for(const result of results ) {
-      const { data } = await Api.getPokemon(result.name)
+    const {
+      data: { results },
+    } = await Api.getAll();
+
+    for (const result of results) {
+      const { data } = await Api.getPokemon(result.name);
       const obj = {
         id: data.id,
         name: data.name,
         image: data.sprites.front_default,
         types: data.types,
         experience: data.base_experience,
-        stats: [data.stats[0], data.stats[1], data.stats[2]]
-      }
-      this.pokemons.push(obj)
+        stats: [data.stats[0], data.stats[1], data.stats[2]],
+      };
+      this.pokemons.push(obj);
     }
-  }
+  },
 };
 </script>
 
@@ -90,6 +97,27 @@ body {
       &:focus &-focus {
         background-color: red;
         transition: 0.4s;
+      }
+
+      &-list {
+        display: grid;
+        width: 100%;
+        grid-template-columns: repeat(6, 16.6%);
+        @media (max-width: 1024px) {
+          grid-template-columns: repeat(4, 25%);
+        }
+
+        @media (max-width: 768px) {
+          grid-template-columns: repeat(3, 33.33%);
+        }
+
+        @media (max-width: 425px) {
+          grid-template-columns: repeat(2, 50%);
+        }
+
+        @media (max-width: 320px) {
+          grid-template-columns: repeat(1, 100%);
+        }
       }
     }
   }
