@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-    baseURL: 'https://pokeapi.co/api/v2/'
+    baseURL: process.env.VUE_APP_POKE_API
 })
 
 export default {
